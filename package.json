@@ -1,0 +1,61 @@
+{
+  "name": "unifi-guest-otp",
+  "description": "UniFi Guest Wi-Fi OTP Authentication API Gateway",
+  "author": {
+    "name": "Uchkun Rakhimov",
+    "email": "uchkunrakhimov@gmail.com",
+    "url": "https://github.com/uchkunr"
+  },
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "tsx watch --no-deprecation --env-file=.env src/index.js",
+    "start": "node src/index.js",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "format": "prettier --write \"src/**/*.js\" \"*.{js,json,md}\"",
+    "format:check": "prettier --check \"src/**/*.js\" \"*.{js,json,md}\""
+  },
+  "type": "commonjs",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uchkunr/unifi-guest-otp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/uchkunr/unifi-guest-otp/issues"
+  },
+  "homepage": "https://github.com/uchkunr/unifi-guest-otp#readme",
+  "dependencies": {
+    "axios": "^1.18.1",
+    "axios-retry": "^4.5.0",
+    "cookie-parser": "^1.4.7",
+    "csurf": "^1.11.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.5.2",
+    "ioredis": "^5.11.1",
+    "mysql2": "^3.22.5",
+    "rate-limit-redis": "^5.0.0",
+    "sequelize": "^6.37.8",
+    "uuid": "^14.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^10.6.0",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.9.4",
+    "tsx": "^4.22.4"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "overrides": {
+    "cookie": "^0.7.2",
+    "sequelize": {
+      "uuid": "^11.1.1"
+    }
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "fsevents@2.3.3": true
+  }
+}

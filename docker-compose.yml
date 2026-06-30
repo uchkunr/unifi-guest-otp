@@ -1,0 +1,66 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: unifi-guest-otp-api
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOST=0.0.0.0
+      - REDIS_URL=redis://redis:6379
+      - DB_HOST=db
+      - DB_NAME=unifi_guest_otp
+      - DB_USER=unifi_otp_user
+      - DB_PASS=unifi_otp_password
+      - DB_DIALECT=mysql
+      # External service credentials are passed from the host .env file
+      - SMS_API_URL=${SMS_API_URL}
+      - SMS_API_LOGIN=${SMS_API_LOGIN}
+      - SMS_API_PWD=${SMS_API_PWD}
+      - SMS_API_CgPN=${SMS_API_CgPN}
+      - UNIFI_HOST=${UNIFI_HOST}
+      - UNIFI_PORT=${UNIFI_PORT}
+      - UNIFI_USERNAME=${UNIFI_USERNAME}
+      - UNIFI_PASSWD=${UNIFI_PASSWD}
+      - TIME_OF_USE=${TIME_OF_USE:-120}
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: unless-stopped
+
+  db:
+    image: mysql:9.7
+    container_name: unifi-guest-otp-db
+    environment:
+      - MYSQL_DATABASE=unifi_guest_otp
+      - MYSQL_USER=unifi_otp_user
+      - MYSQL_PASSWORD=unifi_otp_password
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "unifi_otp_user", "-punifi_otp_password"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine
+    container_name: unifi-guest-otp-redis
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+volumes:
+  db_data:
+  redis_data:
